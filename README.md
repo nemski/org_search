@@ -1,4 +1,4 @@
 OrgSearch
 =========
 
-Search github repos in an Organisation
+Search github repos in an Organisation or User
