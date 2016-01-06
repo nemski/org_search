@@ -2,7 +2,8 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :issues, github_url: "https://api.github.com"
+config :org_search, github_url: "https://api.github.com"
+config :org_search, api_token: nil
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
