@@ -47,7 +47,16 @@ defmodule OrgSearch.CLI do
     OrgSearch.Github.fetch(org, search)
   end
 
-  def print(output) do
-    IO.puts output
+  def print({:ok, result}) do
+    {_, items} = List.keyfind(result, "items", 0)
+    repo_names = for item <- items do
+      {_, repo} = List.keyfind(item, "repository", 0)
+      {_, repo_name} = List.keyfind(repo, "name", 0)
+      repo_name
+    end |> Enum.uniq
+
+    for repo_name <- repo_names, do: IO.puts repo_name
   end
+
+  def print({:error, reason}), do: IO.puts "Failed to fetch results: #{reason}"
 end

@@ -29,4 +29,8 @@ defmodule OrgSearch.Github do
   def handle_response({result, %HTTPoison.Response{status_code: ___, body: body}}) do
     { result, :jsx.decode(body) }
   end
+
+  def handle_response({result, %HTTPoison.Error{id: ___, reason: reason}}) do
+    { result, reason }
+  end
 end
