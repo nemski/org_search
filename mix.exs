@@ -5,6 +5,7 @@ defmodule OrgSearch.Mixfile do
     [app: :org_search,
      version: "0.0.1",
      elixir: "~> 1.0",
+     escript: escript_config,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -14,7 +15,7 @@ defmodule OrgSearch.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [ :logger, :httpoison ]]
+    [applications: [ :logger, :httpoison, :jsx ]]
   end
 
   # Dependencies can be Hex packages:
@@ -31,5 +32,9 @@ defmodule OrgSearch.Mixfile do
       { :httpoison, "~> 0.4" },
       { :jsx,       "~> 2.0" }
     ]
+  end
+
+  defp escript_config do
+    [ main_module: OrgSearch.CLI ]
   end
 end

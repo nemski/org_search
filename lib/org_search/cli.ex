@@ -6,7 +6,7 @@ defmodule OrgSearch.CLI do
   that match a search string
   """
 
-  def run(argv) do
+  def main(argv) do
     argv
       |> parse_args
       |> process
