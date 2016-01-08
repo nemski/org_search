@@ -4,18 +4,19 @@ defmodule OrgSearch.Github do
 
   def fetch(org, search_term) do
     issues_url(org, search_term)
-      |> HTTPoison.get(headers(@auth_token))
+      |> HTTPoison.get([user_agent])
+      |> handle_response
+  end
+
+  def fetch(org, search_term, token) do
+    headers = [ user_agent, auth_header(token) ]
+    issues_url(org, search_term)
+      |> HTTPoison.get(headers)
       |> handle_response
   end
 
   def issues_url(org, search_term) do
     "#{@github_url}/search/code?q=#{search_term}+user:#{org}"
-  end
-
-  def headers(nil), do: [user_agent]
-
-  def headers(auth_token) do
-    [ user_agent, auth_header(auth_token) ]
   end
 
   def auth_header(auth_token) do

@@ -20,13 +20,16 @@ defmodule OrgSearch.CLI do
   """
 
   def parse_args(argv) do
-    parse = OptionParser.parse(argv, switches: [ help: :boolean],
-                                     aliases:  [ h:    :help  ])
+    parse = OptionParser.parse(argv, switches: [ help: :boolean, token: :boolean ],
+                                     aliases:  [ h: :help, t: :token ])
 
     case parse do
 
       { [ help: true ], _, _ }
         -> :help
+
+      { [ token: true ], [ org, search ], _ }
+        -> { org, search, :token }
 
       { _, [ org, search ], _ }
         -> { org, search }
@@ -38,13 +41,25 @@ defmodule OrgSearch.CLI do
 
   def process(:help) do
     IO.puts """
-    usage: org_search <user> <search string>
+    usage: org_search <user> <search string> [ -t prompt for API token ]
     """
     System.halt(0)
   end
 
-  def process({org, search}) do
-    OrgSearch.Github.fetch(org, search)
+  def process({org, search}), do: OrgSearch.Github.fetch(org, search)
+
+  def process({org, search, :token}) do
+    token = prompt_for_token
+    OrgSearch.Github.fetch(org, search, token)
+  end
+
+  def prompt_for_token do
+    IO.write("API Token: ")
+    :io.setopts(echo: false)
+    token = IO.read(:stdio, :line) |> String.rstrip
+    :io.setopts(echo: true)
+
+    token
   end
 
   def print({:ok, result}) do
